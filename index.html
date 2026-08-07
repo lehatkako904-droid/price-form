@@ -29,6 +29,17 @@
             background-color: rgba(15, 23, 42, 0.7);
             backdrop-filter: blur(4px);
         }
+        .stat-card {
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+        }
+        .stat-card:active {
+            transform: scale(0.97);
+        }
     </style>
 </head>
 <body class="text-slate-800 min-h-screen flex flex-col justify-between">
@@ -277,27 +288,34 @@
                 </div>
             </div>
 
-            <!-- Stats Cards -->
+            <!-- Stats Cards (now clickable) -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 custom-shadow flex items-center justify-between">
+                <!-- Total Stores Card -->
+                <div onclick="showStoresList()" class="bg-white p-5 rounded-2xl border border-slate-200 custom-shadow flex items-center justify-between stat-card">
                     <div>
                         <span class="text-xs font-bold text-slate-500 block mb-1">کۆی فرۆشگاکان</span>
                         <span id="statTotalStores" class="text-2xl font-black text-slate-900">0</span>
                     </div>
                     <i class="fa-solid fa-building-store text-2xl text-slate-400"></i>
                 </div>
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 custom-shadow flex items-center justify-between">
+
+                <!-- Total Items Card -->
+                <div onclick="showAllItems()" class="bg-white p-5 rounded-2xl border border-slate-200 custom-shadow flex items-center justify-between stat-card">
                     <div>
                         <span class="text-xs font-bold text-slate-500 block mb-1">کۆی کاڵاکان</span>
                         <span id="statTotalItems" class="text-2xl font-black text-slate-900">0</span>
                     </div>
                     <i class="fa-solid fa-boxes-stacked text-2xl text-blue-600"></i>
                 </div>
+
+                <!-- Min Price Card (unchanged, not clickable) -->
                 <div class="bg-emerald-900 text-white p-5 rounded-2xl border border-emerald-800 custom-shadow">
                     <span class="text-xs font-bold text-emerald-200 block mb-1">کەمتری نرخ (ئەرزانترین)</span>
                     <span id="statMinPrice" class="text-2xl font-black text-emerald-300">$0</span>
                     <p id="statMinDetails" class="text-xs text-emerald-100/80 mt-1 truncate">فرۆشگا: --</p>
                 </div>
+
+                <!-- Max Price Card (unchanged, not clickable) -->
                 <div class="bg-amber-900 text-white p-5 rounded-2xl border border-amber-800 custom-shadow">
                     <span class="text-xs font-bold text-amber-200 block mb-1">زۆرترین نرخ (گرانترین)</span>
                     <span id="statMaxPrice" class="text-2xl font-black text-amber-300">$0</span>
@@ -306,7 +324,7 @@
             </div>
 
             <!-- All Items Table -->
-            <div class="bg-white rounded-2xl border border-slate-200 custom-shadow overflow-hidden">
+            <div id="allItemsTable" class="bg-white rounded-2xl border border-slate-200 custom-shadow overflow-hidden scroll-mt-20">
                 <div class="p-4 bg-slate-900 text-white flex items-center justify-between">
                     <h3 class="text-sm font-bold flex items-center gap-2">
                         <i class="fa-solid fa-list-check text-amber-400"></i>
@@ -333,9 +351,7 @@
                 </div>
             </div>
 
-            <!-- ================================================= -->
-            <!-- NEW: Product Price Comparison Table (by product) -->
-            <!-- ================================================= -->
+            <!-- Product Comparison Table -->
             <div class="bg-white rounded-2xl border border-slate-200 custom-shadow overflow-hidden mt-8">
                 <div class="p-4 bg-slate-800 text-white flex items-center justify-between">
                     <h3 class="text-sm font-bold flex items-center gap-2">
@@ -390,6 +406,17 @@
             </button>
             <h3 id="detailModalTitle" class="text-lg font-bold text-slate-900 mb-4 text-center">وردەکاری نرخەکان</h3>
             <div id="detailModalContent" class="space-y-2"></div>
+        </div>
+    </div>
+
+    <!-- NEW: STORES LIST MODAL -->
+    <div id="storesModal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-3xl w-full p-6 shadow-2xl relative max-h-[80vh] overflow-y-auto">
+            <button onclick="closeStoresModal()" class="absolute top-4 left-4 text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <h3 class="text-lg font-bold text-slate-900 mb-4 text-center">لیستی هەموو فرۆشگاکان</h3>
+            <div id="storesModalContent" class="space-y-2"></div>
         </div>
     </div>
 
@@ -686,9 +713,6 @@
                     </tr>
                 `).join('');
 
-            // =========================================================
-            // NEW: Product Comparison Table (group by product name)
-            // =========================================================
             renderComparisonTable();
         }
 
@@ -704,7 +728,6 @@
                 return;
             }
 
-            // Group by product name (case-insensitive)
             const groups = {};
             masterProducts.forEach(item => {
                 const key = item.productName.trim().toLowerCase();
@@ -760,7 +783,6 @@
             const title = document.getElementById('detailModalTitle');
             const content = document.getElementById('detailModalContent');
 
-            // Find all items with this product name
             const items = masterProducts.filter(i => i.productName.trim().toLowerCase() === productKey);
             if (items.length === 0) return;
 
@@ -774,7 +796,6 @@
                         </div>
                 `;
 
-            // Sort by price
             const sorted = [...items].sort((a, b) => a.productPrice - b.productPrice);
             sorted.forEach((item, index) => {
                 const isMin = index === 0;
@@ -801,9 +822,103 @@
             document.getElementById('detailModal').classList.add('hidden');
         }
 
-        // Close detail modal on background click
-        document.getElementById('detailModal').addEventListener('click', function(e) {
-            if (e.target === this) closeDetailModal();
+        // =============================================
+        // CLICK ACTIONS FOR STAT CARDS
+        // =============================================
+
+        // Show all items: scroll to the table and highlight it
+        function showAllItems() {
+            const table = document.getElementById('allItemsTable');
+            if (table) {
+                table.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // Add a temporary highlight effect
+                table.style.transition = 'box-shadow 0.3s ease';
+                table.style.boxShadow = '0 0 0 4px #f59e0b, 0 10px 25px -5px rgba(0,0,0,0.2)';
+                setTimeout(() => {
+                    table.style.boxShadow = '';
+                }, 2000);
+            }
+        }
+
+        // Show stores list in a modal
+        function showStoresList() {
+            const modal = document.getElementById('storesModal');
+            const content = document.getElementById('storesModalContent');
+
+            if (masterProducts.length === 0) {
+                content.innerHTML = `<p class="text-center text-slate-500 py-4">هیچ فرۆشگایەک تۆمار نەکراوە.</p>`;
+                modal.classList.remove('hidden');
+                return;
+            }
+
+            // Group by store name
+            const storeMap = {};
+            masterProducts.forEach(item => {
+                const key = item.storeName.trim();
+                if (!storeMap[key]) {
+                    storeMap[key] = {
+                        storeName: item.storeName,
+                        phone: item.storePhone,
+                        location: item.storeLocation,
+                        items: []
+                    };
+                }
+                storeMap[key].items.push(item);
+            });
+
+            const storeKeys = Object.keys(storeMap);
+            let html = `
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right text-sm">
+                            <thead class="bg-slate-100 text-slate-700 text-xs border-b">
+                                <tr>
+                                    <th class="p-3">#</th>
+                                    <th class="p-3">ناوی فرۆشگا</th>
+                                    <th class="p-3">شوێن</th>
+                                    <th class="p-3">ژمارەی کاڵا</th>
+                                    <th class="p-3">کەمترین نرخ</th>
+                                    <th class="p-3">بەرزترین نرخ</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                    `;
+
+            storeKeys.forEach((key, index) => {
+                const store = storeMap[key];
+                const items = store.items;
+                const prices = items.map(i => i.productPrice);
+                const minPrice = Math.min(...prices);
+                const maxPrice = Math.max(...prices);
+
+                html += `
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-3 font-bold text-slate-500">${index + 1}</td>
+                                <td class="p-3 font-semibold text-blue-900">${store.storeName}</td>
+                                <td class="p-3 text-slate-600 text-xs">${store.location}</td>
+                                <td class="p-3 text-center font-medium">${items.length}</td>
+                                <td class="p-3 font-bold text-emerald-700">$${minPrice.toFixed(2)}</td>
+                                <td class="p-3 font-bold text-amber-700">$${maxPrice.toFixed(2)}</td>
+                            </tr>
+                        `;
+            });
+
+            html += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+
+            content.innerHTML = html;
+            modal.classList.remove('hidden');
+        }
+
+        function closeStoresModal() {
+            document.getElementById('storesModal').classList.add('hidden');
+        }
+
+        // Close stores modal on background click
+        document.getElementById('storesModal').addEventListener('click', function(e) {
+            if (e.target === this) closeStoresModal();
         });
 
         // =============================================
