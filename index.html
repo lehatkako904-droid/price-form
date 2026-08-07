@@ -308,15 +308,15 @@
                     <i class="fa-solid fa-boxes-stacked text-2xl text-blue-600"></i>
                 </div>
 
-                <!-- Min Price Card (unchanged, not clickable) -->
-                <div class="bg-emerald-900 text-white p-5 rounded-2xl border border-emerald-800 custom-shadow">
+                <!-- Min Price Card - Clickable -->
+                <div onclick="goToMinPriceStore()" class="bg-emerald-900 text-white p-5 rounded-2xl border border-emerald-800 custom-shadow stat-card">
                     <span class="text-xs font-bold text-emerald-200 block mb-1">کەمتری نرخ (ئەرزانترین)</span>
                     <span id="statMinPrice" class="text-2xl font-black text-emerald-300">$0</span>
                     <p id="statMinDetails" class="text-xs text-emerald-100/80 mt-1 truncate">فرۆشگا: --</p>
                 </div>
 
-                <!-- Max Price Card (unchanged, not clickable) -->
-                <div class="bg-amber-900 text-white p-5 rounded-2xl border border-amber-800 custom-shadow">
+                <!-- Max Price Card - Clickable -->
+                <div onclick="goToMaxPriceStore()" class="bg-amber-900 text-white p-5 rounded-2xl border border-amber-800 custom-shadow stat-card">
                     <span class="text-xs font-bold text-amber-200 block mb-1">زۆرترین نرخ (گرانترین)</span>
                     <span id="statMaxPrice" class="text-2xl font-black text-amber-300">$0</span>
                     <p id="statMaxDetails" class="text-xs text-amber-100/80 mt-1 truncate">فرۆشگا: --</p>
@@ -409,13 +409,13 @@
         </div>
     </div>
 
-    <!-- NEW: STORES LIST MODAL -->
+    <!-- STORES LIST MODAL (with highlight support) -->
     <div id="storesModal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl max-w-3xl w-full p-6 shadow-2xl relative max-h-[80vh] overflow-y-auto">
             <button onclick="closeStoresModal()" class="absolute top-4 left-4 text-slate-400 hover:text-slate-600">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
-            <h3 class="text-lg font-bold text-slate-900 mb-4 text-center">لیستی هەموو فرۆشگاکان</h3>
+            <h3 id="storesModalTitle" class="text-lg font-bold text-slate-900 mb-4 text-center">لیستی هەموو فرۆشگاکان</h3>
             <div id="storesModalContent" class="space-y-2"></div>
         </div>
     </div>
@@ -831,7 +831,6 @@
             const table = document.getElementById('allItemsTable');
             if (table) {
                 table.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                // Add a temporary highlight effect
                 table.style.transition = 'box-shadow 0.3s ease';
                 table.style.boxShadow = '0 0 0 4px #f59e0b, 0 10px 25px -5px rgba(0,0,0,0.2)';
                 setTimeout(() => {
@@ -840,10 +839,11 @@
             }
         }
 
-        // Show stores list in a modal
-        function showStoresList() {
+        // Show stores list in a modal (with optional highlight)
+        function showStoresList(highlightStoreName) {
             const modal = document.getElementById('storesModal');
             const content = document.getElementById('storesModalContent');
+            const title = document.getElementById('storesModalTitle');
 
             if (masterProducts.length === 0) {
                 content.innerHTML = `<p class="text-center text-slate-500 py-4">هیچ فرۆشگایەک تۆمار نەکراوە.</p>`;
@@ -890,8 +890,14 @@
                 const minPrice = Math.min(...prices);
                 const maxPrice = Math.max(...prices);
 
+                // Check if this store should be highlighted
+                let rowClass = '';
+                if (highlightStoreName && store.storeName.trim().toLowerCase() === highlightStoreName.trim().toLowerCase()) {
+                    rowClass = 'bg-emerald-100 border-r-4 border-emerald-600';
+                }
+
                 html += `
-                            <tr class="hover:bg-slate-50">
+                            <tr class="hover:bg-slate-50 ${rowClass}">
                                 <td class="p-3 font-bold text-slate-500">${index + 1}</td>
                                 <td class="p-3 font-semibold text-blue-900">${store.storeName}</td>
                                 <td class="p-3 text-slate-600 text-xs">${store.location}</td>
@@ -908,6 +914,12 @@
                     </div>
                 `;
 
+            if (highlightStoreName) {
+                title.textContent = `لیستی فرۆشگاکان - دیاریکردنی فرۆشگای ${highlightStoreName}`;
+            } else {
+                title.textContent = 'لیستی هەموو فرۆشگاکان';
+            }
+
             content.innerHTML = html;
             modal.classList.remove('hidden');
         }
@@ -920,6 +932,51 @@
         document.getElementById('storesModal').addEventListener('click', function(e) {
             if (e.target === this) closeStoresModal();
         });
+
+        // =============================================
+        // NEW: GO TO MIN/MAX PRICE STORE
+        // =============================================
+
+        function goToMinPriceStore() {
+            // Find the item with the minimum price across all products (using current filtered view)
+            const categoryFilter = document.getElementById('adminCategoryFilter').value;
+            const searchQuery = document.getElementById('adminSearchInput').value.toLowerCase().trim();
+
+            let filtered = masterProducts.filter(item => {
+                const matchesCategory = (categoryFilter === 'هەمووی' || item.productCategory === categoryFilter);
+                const matchesSearch = item.productName.toLowerCase().includes(searchQuery) || item.storeName.toLowerCase()
+                    .includes(searchQuery);
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                alert('هیچ کاڵایەک نییە لەم پاڵێوراوەیەدا.');
+                return;
+            }
+
+            const minItem = filtered.reduce((min, p) => p.productPrice < min.productPrice ? p : min, filtered[0]);
+            showStoresList(minItem.storeName);
+        }
+
+        function goToMaxPriceStore() {
+            const categoryFilter = document.getElementById('adminCategoryFilter').value;
+            const searchQuery = document.getElementById('adminSearchInput').value.toLowerCase().trim();
+
+            let filtered = masterProducts.filter(item => {
+                const matchesCategory = (categoryFilter === 'هەمووی' || item.productCategory === categoryFilter);
+                const matchesSearch = item.productName.toLowerCase().includes(searchQuery) || item.storeName.toLowerCase()
+                    .includes(searchQuery);
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                alert('هیچ کاڵایەک نییە لەم پاڵێوراوەیەدا.');
+                return;
+            }
+
+            const maxItem = filtered.reduce((max, p) => p.productPrice > max.productPrice ? p : max, filtered[0]);
+            showStoresList(maxItem.storeName);
+        }
 
         // =============================================
         // DELETE ITEM (Admin)
