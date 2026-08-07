@@ -40,6 +40,14 @@
         .stat-card:active {
             transform: scale(0.97);
         }
+        .highlight-min {
+            background-color: #d1fae5 !important;
+            border-right: 4px solid #059669 !important;
+        }
+        .highlight-max {
+            background-color: #fef3c7 !important;
+            border-right: 4px solid #d97706 !important;
+        }
     </style>
 </head>
 <body class="text-slate-800 min-h-screen flex flex-col justify-between">
@@ -288,7 +296,7 @@
                 </div>
             </div>
 
-            <!-- Stats Cards (now clickable) -->
+            <!-- Stats Cards - ALL CLICKABLE -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <!-- Total Stores Card -->
                 <div onclick="showStoresList()" class="bg-white p-5 rounded-2xl border border-slate-200 custom-shadow flex items-center justify-between stat-card">
@@ -308,15 +316,15 @@
                     <i class="fa-solid fa-boxes-stacked text-2xl text-blue-600"></i>
                 </div>
 
-                <!-- Min Price Card - Clickable -->
-                <div onclick="goToMinPriceStore()" class="bg-emerald-900 text-white p-5 rounded-2xl border border-emerald-800 custom-shadow stat-card">
+                <!-- Min Price Card - CLICKABLE - opens stores modal with min store highlighted -->
+                <div onclick="showMinPriceStore()" class="bg-emerald-900 text-white p-5 rounded-2xl border border-emerald-800 custom-shadow stat-card">
                     <span class="text-xs font-bold text-emerald-200 block mb-1">کەمتری نرخ (ئەرزانترین)</span>
                     <span id="statMinPrice" class="text-2xl font-black text-emerald-300">$0</span>
                     <p id="statMinDetails" class="text-xs text-emerald-100/80 mt-1 truncate">فرۆشگا: --</p>
                 </div>
 
-                <!-- Max Price Card - Clickable -->
-                <div onclick="goToMaxPriceStore()" class="bg-amber-900 text-white p-5 rounded-2xl border border-amber-800 custom-shadow stat-card">
+                <!-- Max Price Card - CLICKABLE - opens stores modal with max store highlighted -->
+                <div onclick="showMaxPriceStore()" class="bg-amber-900 text-white p-5 rounded-2xl border border-amber-800 custom-shadow stat-card">
                     <span class="text-xs font-bold text-amber-200 block mb-1">زۆرترین نرخ (گرانترین)</span>
                     <span id="statMaxPrice" class="text-2xl font-black text-amber-300">$0</span>
                     <p id="statMaxDetails" class="text-xs text-amber-100/80 mt-1 truncate">فرۆشگا: --</p>
@@ -689,11 +697,17 @@
 
                 document.getElementById('statMaxPrice').innerText = `$${maxItem.productPrice.toFixed(2)}`;
                 document.getElementById('statMaxDetails').innerText = `${maxItem.storeName} (${maxItem.productName})`;
+
+                // Store the min and max store names globally for click functions
+                window._minStoreName = minItem.storeName;
+                window._maxStoreName = maxItem.storeName;
             } else {
                 document.getElementById('statMinPrice').innerText = '$0';
                 document.getElementById('statMinDetails').innerText = 'فرۆشگا: --';
                 document.getElementById('statMaxPrice').innerText = '$0';
                 document.getElementById('statMaxDetails').innerText = 'فرۆشگا: --';
+                window._minStoreName = null;
+                window._maxStoreName = null;
             }
 
             // All items table
@@ -839,7 +853,7 @@
             }
         }
 
-        // Show stores list in a modal (with optional highlight)
+        // Show stores list with optional highlighted store
         function showStoresList(highlightStoreName) {
             const modal = document.getElementById('storesModal');
             const content = document.getElementById('storesModalContent');
@@ -893,7 +907,7 @@
                 // Check if this store should be highlighted
                 let rowClass = '';
                 if (highlightStoreName && store.storeName.trim().toLowerCase() === highlightStoreName.trim().toLowerCase()) {
-                    rowClass = 'bg-emerald-100 border-r-4 border-emerald-600';
+                    rowClass = 'highlight-min';
                 }
 
                 html += `
@@ -915,7 +929,7 @@
                 `;
 
             if (highlightStoreName) {
-                title.textContent = `لیستی فرۆشگاکان - دیاریکردنی فرۆشگای ${highlightStoreName}`;
+                title.textContent = `لیستی فرۆشگاکان - دیاریکردنی فرۆشگای "${highlightStoreName}"`;
             } else {
                 title.textContent = 'لیستی هەموو فرۆشگاکان';
             }
@@ -934,48 +948,23 @@
         });
 
         // =============================================
-        // NEW: GO TO MIN/MAX PRICE STORE
+        // CLICK HANDLERS FOR MIN/MAX PRICE CARDS
         // =============================================
 
-        function goToMinPriceStore() {
-            // Find the item with the minimum price across all products (using current filtered view)
-            const categoryFilter = document.getElementById('adminCategoryFilter').value;
-            const searchQuery = document.getElementById('adminSearchInput').value.toLowerCase().trim();
-
-            let filtered = masterProducts.filter(item => {
-                const matchesCategory = (categoryFilter === 'هەمووی' || item.productCategory === categoryFilter);
-                const matchesSearch = item.productName.toLowerCase().includes(searchQuery) || item.storeName.toLowerCase()
-                    .includes(searchQuery);
-                return matchesCategory && matchesSearch;
-            });
-
-            if (filtered.length === 0) {
-                alert('هیچ کاڵایەک نییە لەم پاڵێوراوەیەدا.');
-                return;
+        function showMinPriceStore() {
+            if (window._minStoreName) {
+                showStoresList(window._minStoreName);
+            } else {
+                alert('هیچ کاڵایەک نییە بۆ دیاریکردنی کەمترین نرخ.');
             }
-
-            const minItem = filtered.reduce((min, p) => p.productPrice < min.productPrice ? p : min, filtered[0]);
-            showStoresList(minItem.storeName);
         }
 
-        function goToMaxPriceStore() {
-            const categoryFilter = document.getElementById('adminCategoryFilter').value;
-            const searchQuery = document.getElementById('adminSearchInput').value.toLowerCase().trim();
-
-            let filtered = masterProducts.filter(item => {
-                const matchesCategory = (categoryFilter === 'هەمووی' || item.productCategory === categoryFilter);
-                const matchesSearch = item.productName.toLowerCase().includes(searchQuery) || item.storeName.toLowerCase()
-                    .includes(searchQuery);
-                return matchesCategory && matchesSearch;
-            });
-
-            if (filtered.length === 0) {
-                alert('هیچ کاڵایەک نییە لەم پاڵێوراوەیەدا.');
-                return;
+        function showMaxPriceStore() {
+            if (window._maxStoreName) {
+                showStoresList(window._maxStoreName);
+            } else {
+                alert('هیچ کاڵایەک نییە بۆ دیاریکردنی زۆرترین نرخ.');
             }
-
-            const maxItem = filtered.reduce((max, p) => p.productPrice > max.productPrice ? p : max, filtered[0]);
-            showStoresList(maxItem.storeName);
         }
 
         // =============================================
