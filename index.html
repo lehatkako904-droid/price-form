@@ -6,8 +6,9 @@
     <title>سیستەمی فەرمی تۆمارکردن و داشبۆردی بەراوردکاری نرخەکان</title>
 
     <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -31,7 +32,7 @@
     <!-- HEADER WITH LOGO -->
     <header class="bg-slate-900 text-white border-b-4 border-amber-600 custom-shadow sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
-            
+
             <div class="flex items-center gap-4">
                 <div class="bg-white p-1.5 rounded-lg shadow-inner border border-amber-500/30 flex items-center justify-center">
                     <img src="logo.jpg" alt="Logo" class="h-12 w-auto object-contain rounded">
@@ -72,7 +73,7 @@
         <!-- ================================================= -->
         <section id="sellerAuthSection" class="max-w-4xl mx-auto w-full">
             <div class="bg-white rounded-3xl custom-shadow overflow-hidden border border-slate-200 grid grid-cols-1 md:grid-cols-2">
-                
+
                 <!-- Left Banner Box -->
                 <div class="bg-slate-900 text-white p-8 md:p-10 flex flex-col justify-between relative overflow-hidden">
                     <div class="absolute inset-0 bg-blue-900/20 z-0"></div>
@@ -91,7 +92,7 @@
 
                 <!-- Right Form Box (Switchable Login / Sign Up) -->
                 <div class="p-8 md:p-10 flex flex-col justify-center">
-                    
+
                     <!-- LOGIN FORM -->
                     <div id="sellerLoginForm">
                         <h3 class="text-xl font-bold text-slate-900 mb-1">چوونەژوورەوەی فرۆشیار</h3>
@@ -114,7 +115,7 @@
                         </form>
 
                         <p class="text-xs text-slate-600 text-center mt-6">
-                            هەژمارت نییە؟ 
+                            هەژمارت نییە؟
                             <button onclick="toggleAuthForm('signup')" class="text-blue-900 font-bold hover:underline">تۆمارکردنی هەژماری نوێ (Sign up)</button>
                         </p>
                     </div>
@@ -157,7 +158,7 @@
                         </form>
 
                         <p class="text-xs text-slate-600 text-center mt-4">
-                            پێشتر هەژمارت دروستکردووە؟ 
+                            پێشتر هەژمارت دروستکردووە؟
                             <button onclick="toggleAuthForm('login')" class="text-blue-900 font-bold hover:underline">چوونەژوورەوە (Login)</button>
                         </p>
                     </div>
@@ -170,7 +171,7 @@
         <!-- 2. SELLER ITEM REGISTRATION FORM (AFTER LOGIN)    -->
         <!-- ================================================= -->
         <section id="sellerPortalView" class="space-y-6 hidden">
-            
+
             <div class="bg-blue-900/10 border-r-4 border-blue-900 p-4 rounded-xl flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <i class="fa-solid fa-circle-info text-blue-900 text-xl"></i>
@@ -181,7 +182,7 @@
             </div>
 
             <form id="sellerRegistrationForm" onsubmit="handleFormSubmit(event)" class="space-y-6">
-                
+
                 <div class="bg-white rounded-2xl p-6 custom-shadow border border-slate-200">
                     <div class="flex items-center justify-between mb-5 border-b border-slate-100 pb-3">
                         <div class="flex items-center gap-3">
@@ -191,7 +192,7 @@
                     </div>
 
                     <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                        
+
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1">ناوی کاڵا <span class="text-red-500">*</span></label>
                             <input type="text" id="tempItemName" placeholder="نموونە: ئایفۆن ١٥ پرۆ" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-900">
@@ -248,6 +249,18 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- ✅ NEW: Min / Max Price Stats for Temp Items -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 flex justify-between items-center">
+                            <span class="text-sm font-bold text-emerald-800"><i class="fa-solid fa-arrow-down ml-1"></i> کەمترین نرخ</span>
+                            <span id="tempMinPrice" class="text-xl font-black text-emerald-900">$0.00</span>
+                        </div>
+                        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 flex justify-between items-center">
+                            <span class="text-sm font-bold text-amber-800"><i class="fa-solid fa-arrow-up ml-1"></i> بەرزترین نرخ</span>
+                            <span id="tempMaxPrice" class="text-xl font-black text-amber-900">$0.00</span>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="flex justify-end gap-3 pt-2">
@@ -264,7 +277,7 @@
         <!-- 3. ADMIN DASHBOARD (RESTRICTED FOR ADMIN)        -->
         <!-- ================================================= -->
         <section id="adminDashboardView" class="space-y-6 hidden">
-            
+
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-5 rounded-2xl custom-shadow border border-slate-200">
                 <div>
                     <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
@@ -464,7 +477,7 @@
                 adminDashboard.classList.add('hidden');
                 logoutBtn.classList.remove('hidden');
                 userBadge.classList.remove('hidden');
-                
+
                 document.getElementById('currentSellerNameText').innerText = currentSellerSession.storeName;
                 document.getElementById('activeStoreNameTitle').innerText = currentSellerSession.storeName;
             } else {
@@ -478,6 +491,7 @@
 
         // Admin Modal Controls
         function openAdminModal() { document.getElementById('adminModal').classList.remove('hidden'); }
+
         function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
 
         function handleAdminLogin(e) {
@@ -523,32 +537,54 @@
             priceInput.value = '';
             imageInput.value = '';
             renderTempItemsTable();
+            updateTempPriceStats(); // ✅ Update min/max after adding
         }
 
         function renderTempItemsTable() {
             const tbody = document.getElementById('tempItemsTable');
             if (tempSellerItems.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400 font-medium">هیچ کاڵایەک زیادر نەکراوە.</td></tr>`;
+                tbody.innerHTML =
+                    `<tr><td colspan="6" class="p-6 text-center text-slate-400 font-medium">هیچ کاڵایەک زیادر نەکراوە.</td></tr>`;
                 return;
             }
 
             tbody.innerHTML = tempSellerItems.map((item, index) => `
-                <tr class="hover:bg-slate-50 transition">
-                    <td class="p-3 font-bold text-slate-500">${index + 1}</td>
-                    <td class="p-3"><img src="${item.imageUrl}" class="w-10 h-10 object-cover rounded-lg border"></td>
-                    <td class="p-3 font-semibold text-slate-800">${item.productName}</td>
-                    <td class="p-3 text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded w-max">${item.productCategory}</td>
-                    <td class="p-3 font-bold text-emerald-700">$${item.productPrice.toFixed(2)}</td>
-                    <td class="p-3 text-center">
-                        <button type="button" onclick="removeTempItem(${index})" class="text-red-600 hover:text-red-800 p-1"><i class="fa-solid fa-trash-can"></i></button>
-                    </td>
-                </tr>
-            `).join('');
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="p-3 font-bold text-slate-500">${index + 1}</td>
+                        <td class="p-3"><img src="${item.imageUrl}" class="w-10 h-10 object-cover rounded-lg border"></td>
+                        <td class="p-3 font-semibold text-slate-800">${item.productName}</td>
+                        <td class="p-3 text-xs bg-slate-100 text-slate-700 px-2 py-1 rounded w-max">${item.productCategory}</td>
+                        <td class="p-3 font-bold text-emerald-700">$${item.productPrice.toFixed(2)}</td>
+                        <td class="p-3 text-center">
+                            <button type="button" onclick="removeTempItem(${index})" class="text-red-600 hover:text-red-800 p-1"><i class="fa-solid fa-trash-can"></i></button>
+                        </td>
+                    </tr>
+                `).join('');
         }
 
         function removeTempItem(index) {
             tempSellerItems.splice(index, 1);
             renderTempItemsTable();
+            updateTempPriceStats(); // ✅ Update min/max after removal
+        }
+
+        // ✅ NEW: Update Min & Max Price for Temp Items
+        function updateTempPriceStats() {
+            const minSpan = document.getElementById('tempMinPrice');
+            const maxSpan = document.getElementById('tempMaxPrice');
+
+            if (tempSellerItems.length === 0) {
+                minSpan.textContent = '$0.00';
+                maxSpan.textContent = '$0.00';
+                return;
+            }
+
+            const prices = tempSellerItems.map(item => item.productPrice);
+            const minPrice = Math.min(...prices);
+            const maxPrice = Math.max(...prices);
+
+            minSpan.textContent = `$${minPrice.toFixed(2)}`;
+            maxSpan.textContent = `$${maxPrice.toFixed(2)}`;
         }
 
         function handleFormSubmit(e) {
@@ -575,6 +611,7 @@
             tempSellerItems = [];
             document.getElementById('sellerRegistrationForm').reset();
             renderTempItemsTable();
+            updateTempPriceStats(); // ✅ Reset min/max to zero after submission
 
             alert('سەرجەم کاڵاکان بە سەرکەوتوویی ڕەوانەکران بۆ بەڕێوەبەری سیستەم!');
         }
@@ -588,7 +625,8 @@
 
             let filtered = masterProducts.filter(item => {
                 const matchesCategory = (categoryFilter === 'هەمووی' || item.productCategory === categoryFilter);
-                const matchesSearch = item.productName.toLowerCase().includes(searchQuery) || item.storeName.toLowerCase().includes(searchQuery);
+                const matchesSearch = item.productName.toLowerCase().includes(searchQuery) || item.storeName.toLowerCase()
+                    .includes(searchQuery);
                 return matchesCategory && matchesSearch;
             });
 
@@ -606,23 +644,28 @@
 
                 document.getElementById('statMaxPrice').innerText = `$${maxItem.productPrice.toFixed(2)}`;
                 document.getElementById('statMaxDetails').innerText = `${maxItem.storeName} (${maxItem.productName})`;
+            } else {
+                document.getElementById('statMinPrice').innerText = '$0';
+                document.getElementById('statMinDetails').innerText = 'فرۆشگا: --';
+                document.getElementById('statMaxPrice').innerText = '$0';
+                document.getElementById('statMaxDetails').innerText = 'فرۆشگا: --';
             }
 
             const tbody = document.getElementById('adminDataTable');
             tbody.innerHTML = filtered.map(item => `
-                <tr class="hover:bg-slate-50 transition border-b border-slate-100">
-                    <td class="p-3"><img src="${item.imageUrl}" class="w-12 h-12 object-cover rounded-lg border"></td>
-                    <td class="p-3 font-bold text-slate-900">${item.productName}</td>
-                    <td class="p-3"><span class="bg-slate-100 text-slate-700 font-semibold px-2.5 py-1 rounded-md text-xs border">${item.productCategory}</span></td>
-                    <td class="p-3 font-semibold text-blue-950">${item.storeName}</td>
-                    <td class="p-3 text-slate-600 text-xs">${item.storeLocation}</td>
-                    <td class="p-3 text-slate-700 font-mono text-xs" dir="ltr">${item.storePhone}</td>
-                    <td class="p-3 font-black text-blue-900 text-base">$${item.productPrice.toFixed(2)}</td>
-                    <td class="p-3 text-center">
-                        <button onclick="deleteMasterItem(${item.id})" class="text-red-500 hover:text-red-700 text-xs bg-red-50 p-2 rounded-lg"><i class="fa-solid fa-trash-can"></i></button>
-                    </td>
-                </tr>
-            `).join('');
+                    <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+                        <td class="p-3"><img src="${item.imageUrl}" class="w-12 h-12 object-cover rounded-lg border"></td>
+                        <td class="p-3 font-bold text-slate-900">${item.productName}</td>
+                        <td class="p-3"><span class="bg-slate-100 text-slate-700 font-semibold px-2.5 py-1 rounded-md text-xs border">${item.productCategory}</span></td>
+                        <td class="p-3 font-semibold text-blue-950">${item.storeName}</td>
+                        <td class="p-3 text-slate-600 text-xs">${item.storeLocation}</td>
+                        <td class="p-3 text-slate-700 font-mono text-xs" dir="ltr">${item.storePhone}</td>
+                        <td class="p-3 font-black text-blue-900 text-base">$${item.productPrice.toFixed(2)}</td>
+                        <td class="p-3 text-center">
+                            <button onclick="deleteMasterItem(${item.id})" class="text-red-500 hover:text-red-700 text-xs bg-red-50 p-2 rounded-lg"><i class="fa-solid fa-trash-can"></i></button>
+                        </td>
+                    </tr>
+                `).join('');
         }
 
         function deleteMasterItem(id) {
@@ -636,6 +679,7 @@
         // Initialize App UI State
         document.addEventListener('DOMContentLoaded', () => {
             updateAppUI();
+            updateTempPriceStats(); // Ensure stats show zero initially
         });
     </script>
 </body>
