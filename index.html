@@ -20,10 +20,30 @@
     <style>
         body {
             font-family: 'Vazirmatn', sans-serif;
-            background-color: #f4f6f9;
+            /* ==========================================
+               باکگراوندی گشتی پەڕە بە وێنەی 
+               basic-krg-logo.jpg
+               کە لە پرۆژەکەدا هەیە
+               ========================================== */
+            background-image: url('basic-krg-logo.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            
+            /* ڕەنگی پشتیو بۆ کاتی بارنەبوونی وێنە */
+            background-color: #1e293b;
         }
+        
+        /* کاریگەری شوشە بۆ ناوەڕۆکەکان */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+        }
+        
         .custom-shadow {
-            box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.1);
+            box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.15);
         }
         .modal-overlay {
             background-color: rgba(15, 23, 42, 0.7);
@@ -48,16 +68,47 @@
             background-color: #fef3c7 !important;
             border-right: 4px solid #d97706 !important;
         }
+        
+        /* ڕوونکردنەوەی کارت و بۆکسەکان بۆ خوێندنەوەی باشتر */
+        .bg-white {
+            background-color: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+        .bg-slate-50 {
+            background-color: rgba(248, 250, 252, 0.9);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+        }
+        .bg-slate-100 {
+            background-color: rgba(241, 245, 249, 0.9);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+        }
+        
+        /* سەرپەڕە ڕوون */
+        header {
+            background-color: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+        
+        @media (max-width: 640px) {
+            body {
+                background-attachment: scroll;
+            }
+        }
     </style>
 </head>
-<body class="text-slate-800 min-h-screen flex flex-col justify-between">
+<body class="text-slate-800 min-h-screen flex flex-col">
 
     <!-- HEADER WITH LOGO -->
-    <header class="bg-slate-900 text-white border-b-4 border-amber-600 custom-shadow sticky top-0 z-40">
+    <header class="text-white border-b-4 border-amber-600 custom-shadow sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
 
             <div class="flex items-center gap-4">
                 <div class="bg-white p-1.5 rounded-lg shadow-inner border border-amber-500/30 flex items-center justify-center">
+                    <!-- لۆگۆی بچووک لە ناوەڕاست -->
                     <img src="logo.jpg" alt="Logo" class="h-12 w-auto object-contain rounded">
                 </div>
                 <div>
@@ -94,12 +145,13 @@
         <!-- 1. SELLER AUTHENTICATION CARD (LOGIN & SIGN UP)   -->
         <!-- ================================================= -->
         <section id="sellerAuthSection" class="max-w-4xl mx-auto w-full">
-            <div class="bg-white rounded-3xl custom-shadow overflow-hidden border border-slate-200 grid grid-cols-1 md:grid-cols-2">
+            <div class="rounded-3xl custom-shadow overflow-hidden border border-slate-200 grid grid-cols-1 md:grid-cols-2 glass-effect">
 
-                <div class="bg-slate-900 text-white p-8 md:p-10 flex flex-col justify-between relative overflow-hidden">
+                <div class="bg-slate-900/80 text-white p-8 md:p-10 flex flex-col justify-between relative overflow-hidden backdrop-blur-sm">
                     <div class="absolute inset-0 bg-blue-900/20 z-0"></div>
                     <div class="relative z-10">
-                        <img src="logo.jpg" class="h-16 w-auto rounded-lg mb-6 border border-amber-500/40 p-1 bg-white" alt="Logo Banner">
+                        <!-- لۆگۆی گەورە لە بەشی چەپی فۆرم -->
+                        <img src="logo1.jpg" class="h-16 w-auto rounded-lg mb-6 border border-amber-500/40 p-1 bg-white/90" alt="Logo Banner">
                         <h2 class="text-2xl font-black text-slate-100 mb-2">بەخێربێن بۆ پۆڕتاڵی فرۆشیاران</h2>
                         <p class="text-xs text-slate-300 leading-relaxed mt-2">
                             تکایە پێش داخڵکردنی نرخ و کاڵاکانت، بچۆ ژوورەوە یان هەژمارێکی نوێ بۆ دوکان و کۆمپانیاکەت دروست بکە.
@@ -110,7 +162,7 @@
                     </div>
                 </div>
 
-                <div class="p-8 md:p-10 flex flex-col justify-center">
+                <div class="p-8 md:p-10 flex flex-col justify-center bg-white/90 backdrop-blur-sm">
                     <!-- LOGIN FORM -->
                     <div id="sellerLoginForm">
                         <h3 class="text-xl font-bold text-slate-900 mb-1">چوونەژوورەوەی فرۆشیار</h3>
@@ -118,11 +170,11 @@
                         <form onsubmit="handleSellerLogin(event)" class="space-y-4">
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 mb-1">ژمارەی مۆبایل / ناو</label>
-                                <input type="text" id="sellerLoginPhone" required placeholder="0750XXXXXXX" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-blue-900 transition">
+                                <input type="text" id="sellerLoginPhone" required placeholder="0750XXXXXXX" class="w-full px-3.5 py-2.5 bg-slate-50/80 border border-slate-300 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-blue-900 transition">
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 mb-1">وشەی تێپەڕ (Password)</label>
-                                <input type="password" id="sellerLoginPass" required placeholder="••••••••" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-blue-900 transition">
+                                <input type="password" id="sellerLoginPass" required placeholder="••••••••" class="w-full px-3.5 py-2.5 bg-slate-50/80 border border-slate-300 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-blue-900 transition">
                             </div>
                             <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold py-3 rounded-xl text-sm transition shadow-md mt-2">
                                 چوونەژوورەوە
@@ -141,15 +193,15 @@
                         <form onsubmit="handleSellerSignUp(event)" class="space-y-3">
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 mb-1">ناوی دوکان / کۆمپانیا <span class="text-red-500">*</span></label>
-                                <input type="text" id="signUpStoreName" required placeholder="کۆمپانیای..." class="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-blue-900">
+                                <input type="text" id="signUpStoreName" required placeholder="کۆمپانیای..." class="w-full px-3.5 py-2 bg-slate-50/80 border border-slate-300 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-blue-900">
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 mb-1">ژمارەی پەیوەندی / مۆبایل <span class="text-red-500">*</span></label>
-                                <input type="tel" id="signUpPhone" required placeholder="0750XXXXXXX" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-blue-900 text-left" dir="ltr">
+                                <input type="tel" id="signUpPhone" required placeholder="0750XXXXXXX" class="w-full px-3.5 py-2 bg-slate-50/80 border border-slate-300 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-blue-900 text-left" dir="ltr">
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 mb-1">شار / شوێنی فرۆشگا</label>
-                                <select id="signUpLocation" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-blue-900">
+                                <select id="signUpLocation" class="w-full px-3.5 py-2 bg-slate-50/80 border border-slate-300 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-blue-900">
                                     <option value="هەولێر">هەولێر</option>
                                     <option value="سلێمانی">سلێمانی</option>
                                     <option value="دهۆک">دهۆک</option>
@@ -159,7 +211,7 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 mb-1">وشەی تێپەڕ نوێ <span class="text-red-500">*</span></label>
-                                <input type="password" id="signUpPass" required placeholder="••••••••" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-blue-900">
+                                <input type="password" id="signUpPass" required placeholder="••••••••" class="w-full px-3.5 py-2 bg-slate-50/80 border border-slate-300 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-blue-900">
                             </div>
                             <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-xl text-sm transition shadow-md mt-2">
                                 دروستکردنی هەژمار و چوونەژوورەوە
@@ -178,7 +230,7 @@
         <!-- 2. SELLER ITEM REGISTRATION FORM (AFTER LOGIN)    -->
         <!-- ================================================= -->
         <section id="sellerPortalView" class="space-y-6 hidden">
-            <div class="bg-blue-900/10 border-r-4 border-blue-900 p-4 rounded-xl flex items-center justify-between">
+            <div class="bg-blue-900/10 border-r-4 border-blue-900 p-4 rounded-xl flex items-center justify-between glass-effect">
                 <div class="flex items-center gap-3">
                     <i class="fa-solid fa-circle-info text-blue-900 text-xl"></i>
                     <p class="text-sm font-medium text-slate-700">
@@ -188,7 +240,7 @@
             </div>
 
             <form id="sellerRegistrationForm" onsubmit="handleFormSubmit(event)" class="space-y-6">
-                <div class="bg-white rounded-2xl p-6 custom-shadow border border-slate-200">
+                <div class="rounded-2xl p-6 custom-shadow border border-slate-200 glass-effect">
                     <div class="flex items-center justify-between mb-5 border-b border-slate-100 pb-3">
                         <div class="flex items-center gap-3">
                             <span class="w-8 h-8 rounded-full bg-slate-900 text-amber-400 flex items-center justify-center font-bold text-sm">١</span>
@@ -196,7 +248,7 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-slate-50/80 p-4 rounded-xl border border-slate-200 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1">ناوی کاڵا <span class="text-red-500">*</span></label>
                             <input type="text" id="tempItemName" placeholder="نموونە: ئایفۆن ١٥ پرۆ" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-900">
@@ -228,7 +280,7 @@
                         </div>
                     </div>
 
-                    <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                    <div class="overflow-x-auto border border-slate-200 rounded-xl bg-white/80">
                         <table class="w-full text-right text-sm">
                             <thead class="bg-slate-900 text-slate-200 text-xs">
                                 <tr>
@@ -250,11 +302,11 @@
 
                     <!-- Min/Max Price Stats for Temp Items -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 flex justify-between items-center">
+                        <div class="bg-emerald-50/90 border border-emerald-200 rounded-xl p-4 flex justify-between items-center">
                             <span class="text-sm font-bold text-emerald-800"><i class="fa-solid fa-arrow-down ml-1"></i> کەمترین نرخ (ناو لیستەکە)</span>
                             <span id="tempMinPrice" class="text-xl font-black text-emerald-900">$0.00</span>
                         </div>
-                        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 flex justify-between items-center">
+                        <div class="bg-amber-50/90 border border-amber-200 rounded-xl p-4 flex justify-between items-center">
                             <span class="text-sm font-bold text-amber-800"><i class="fa-solid fa-arrow-up ml-1"></i> بەرزترین نرخ (ناو لیستەکە)</span>
                             <span id="tempMaxPrice" class="text-xl font-black text-amber-900">$0.00</span>
                         </div>
@@ -275,7 +327,7 @@
         <!-- ================================================= -->
         <section id="adminDashboardView" class="space-y-6 hidden">
 
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-5 rounded-2xl custom-shadow border border-slate-200">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 p-5 rounded-2xl custom-shadow border border-slate-200 glass-effect">
                 <div>
                     <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
                         <i class="fa-solid fa-chart-pie text-amber-600"></i>
@@ -284,8 +336,8 @@
                     <p class="text-xs text-slate-500 mt-1">شیکاری بەراوردکاری بۆ کەمتری و زۆرترین نرخ</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
-                    <input type="text" id="adminSearchInput" oninput="renderAdminDashboard()" placeholder="گەڕان بۆ ناوی کاڵا یان فرۆشگا..." class="px-4 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs w-full sm:w-60">
-                    <select id="adminCategoryFilter" onchange="renderAdminDashboard()" class="px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-semibold">
+                    <input type="text" id="adminSearchInput" oninput="renderAdminDashboard()" placeholder="گەڕان بۆ ناوی کاڵا یان فرۆشگا..." class="px-4 py-2 bg-slate-50/80 border border-slate-300 rounded-lg text-xs w-full sm:w-60">
+                    <select id="adminCategoryFilter" onchange="renderAdminDashboard()" class="px-3 py-2 bg-slate-50/80 border border-slate-300 rounded-lg text-xs font-semibold">
                         <option value="هەمووی">هەموو کاتەگۆرییەکان</option>
                         <option value="ئەلیکترۆنیات">ئەلیکترۆنیات</option>
                         <option value="کەلوپەلی ناوماڵ">کەلوپەلی ناوماڵ</option>
@@ -298,8 +350,7 @@
 
             <!-- Stats Cards - ALL CLICKABLE -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- Total Stores Card -->
-                <div onclick="showStoresList()" class="bg-white p-5 rounded-2xl border border-slate-200 custom-shadow flex items-center justify-between stat-card">
+                <div onclick="showStoresList()" class="bg-white/90 p-5 rounded-2xl border border-slate-200 custom-shadow flex items-center justify-between stat-card backdrop-blur-sm">
                     <div>
                         <span class="text-xs font-bold text-slate-500 block mb-1">کۆی فرۆشگاکان</span>
                         <span id="statTotalStores" class="text-2xl font-black text-slate-900">0</span>
@@ -307,8 +358,7 @@
                     <i class="fa-solid fa-building-store text-2xl text-slate-400"></i>
                 </div>
 
-                <!-- Total Items Card -->
-                <div onclick="showAllItems()" class="bg-white p-5 rounded-2xl border border-slate-200 custom-shadow flex items-center justify-between stat-card">
+                <div onclick="showAllItems()" class="bg-white/90 p-5 rounded-2xl border border-slate-200 custom-shadow flex items-center justify-between stat-card backdrop-blur-sm">
                     <div>
                         <span class="text-xs font-bold text-slate-500 block mb-1">کۆی کاڵاکان</span>
                         <span id="statTotalItems" class="text-2xl font-black text-slate-900">0</span>
@@ -316,15 +366,13 @@
                     <i class="fa-solid fa-boxes-stacked text-2xl text-blue-600"></i>
                 </div>
 
-                <!-- Min Price Card - CLICKABLE - opens stores modal with min store highlighted -->
-                <div onclick="showMinPriceStore()" class="bg-emerald-900 text-white p-5 rounded-2xl border border-emerald-800 custom-shadow stat-card">
+                <div onclick="showMinPriceStore()" class="bg-emerald-900/90 p-5 rounded-2xl border border-emerald-800 custom-shadow stat-card backdrop-blur-sm">
                     <span class="text-xs font-bold text-emerald-200 block mb-1">کەمتری نرخ (ئەرزانترین)</span>
                     <span id="statMinPrice" class="text-2xl font-black text-emerald-300">$0</span>
                     <p id="statMinDetails" class="text-xs text-emerald-100/80 mt-1 truncate">فرۆشگا: --</p>
                 </div>
 
-                <!-- Max Price Card - CLICKABLE - opens stores modal with max store highlighted -->
-                <div onclick="showMaxPriceStore()" class="bg-amber-900 text-white p-5 rounded-2xl border border-amber-800 custom-shadow stat-card">
+                <div onclick="showMaxPriceStore()" class="bg-amber-900/90 p-5 rounded-2xl border border-amber-800 custom-shadow stat-card backdrop-blur-sm">
                     <span class="text-xs font-bold text-amber-200 block mb-1">زۆرترین نرخ (گرانترین)</span>
                     <span id="statMaxPrice" class="text-2xl font-black text-amber-300">$0</span>
                     <p id="statMaxDetails" class="text-xs text-amber-100/80 mt-1 truncate">فرۆشگا: --</p>
@@ -332,7 +380,7 @@
             </div>
 
             <!-- All Items Table -->
-            <div id="allItemsTable" class="bg-white rounded-2xl border border-slate-200 custom-shadow overflow-hidden scroll-mt-20">
+            <div id="allItemsTable" class="rounded-2xl border border-slate-200 custom-shadow overflow-hidden scroll-mt-20 glass-effect">
                 <div class="p-4 bg-slate-900 text-white flex items-center justify-between">
                     <h3 class="text-sm font-bold flex items-center gap-2">
                         <i class="fa-solid fa-list-check text-amber-400"></i>
@@ -342,7 +390,7 @@
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-right text-sm">
-                        <thead class="bg-slate-100 text-slate-700 text-xs border-b border-slate-200">
+                        <thead class="bg-slate-100/90 text-slate-700 text-xs border-b border-slate-200">
                             <tr>
                                 <th class="p-3.5">وێنە</th>
                                 <th class="p-3.5">ناوی کاڵا</th>
@@ -360,7 +408,7 @@
             </div>
 
             <!-- Product Comparison Table -->
-            <div class="bg-white rounded-2xl border border-slate-200 custom-shadow overflow-hidden mt-8">
+            <div class="rounded-2xl border border-slate-200 custom-shadow overflow-hidden mt-8 glass-effect">
                 <div class="p-4 bg-slate-800 text-white flex items-center justify-between">
                     <h3 class="text-sm font-bold flex items-center gap-2">
                         <i class="fa-solid fa-scale-balanced text-amber-400"></i>
@@ -370,7 +418,7 @@
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-right text-sm">
-                        <thead class="bg-amber-50 text-slate-700 text-xs border-b border-slate-200">
+                        <thead class="bg-amber-50/90 text-slate-700 text-xs border-b border-slate-200">
                             <tr>
                                 <th class="p-3.5">ناوی کاڵا</th>
                                 <th class="p-3.5">کاتەگۆری</th>
@@ -392,7 +440,7 @@
     </main>
 
     <!-- ADMIN LOGIN MODAL -->
-    <div id="adminModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div id="adminModal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative">
             <button onclick="closeAdminModal()" class="absolute top-4 left-4 text-slate-400 hover:text-slate-600">
                 <i class="fa-solid fa-xmark text-lg"></i>
@@ -429,9 +477,10 @@
     </div>
 
     <!-- FOOTER -->
-    <footer class="bg-slate-900 text-slate-400 border-t border-slate-800 py-4 mt-auto">
+    <footer class="bg-slate-900/90 text-slate-400 border-t border-slate-800 py-4 mt-auto backdrop-blur-sm">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center text-xs gap-2">
             <div class="flex items-center gap-2">
+                <!-- لۆگۆی پێ -->
                 <img src="logo.jpg" class="h-6 w-auto rounded opacity-80" alt="Footer Logo">
                 <span>سیستەمی ناوەندی بەراوردکاری نرخ - ڕێنمایی و بەڕێوەبەرایەتی گشتی</span>
             </div>
@@ -840,7 +889,6 @@
         // CLICK ACTIONS FOR STAT CARDS
         // =============================================
 
-        // Show all items: scroll to the table and highlight it
         function showAllItems() {
             const table = document.getElementById('allItemsTable');
             if (table) {
@@ -853,7 +901,6 @@
             }
         }
 
-        // Show stores list with optional highlighted store
         function showStoresList(highlightStoreName) {
             const modal = document.getElementById('storesModal');
             const content = document.getElementById('storesModalContent');
@@ -865,7 +912,6 @@
                 return;
             }
 
-            // Group by store name
             const storeMap = {};
             masterProducts.forEach(item => {
                 const key = item.storeName.trim();
@@ -904,7 +950,6 @@
                 const minPrice = Math.min(...prices);
                 const maxPrice = Math.max(...prices);
 
-                // Check if this store should be highlighted
                 let rowClass = '';
                 if (highlightStoreName && store.storeName.trim().toLowerCase() === highlightStoreName.trim().toLowerCase()) {
                     rowClass = 'highlight-min';
@@ -942,14 +987,9 @@
             document.getElementById('storesModal').classList.add('hidden');
         }
 
-        // Close stores modal on background click
         document.getElementById('storesModal').addEventListener('click', function(e) {
             if (e.target === this) closeStoresModal();
         });
-
-        // =============================================
-        // CLICK HANDLERS FOR MIN/MAX PRICE CARDS
-        // =============================================
 
         function showMinPriceStore() {
             if (window._minStoreName) {
